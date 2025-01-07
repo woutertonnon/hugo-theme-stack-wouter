@@ -33,13 +33,33 @@
     function setCusdisTheme(theme) {
         let cusdis = document.querySelector('#cusdis_thread iframe');
         if (cusdis) {
-            window.CUSDIS.setTheme(theme)
+            window.CUSDIS.setTheme(theme);
+
+            // Force custom styles based on the theme
+            const iframeDoc = cusdis.contentWindow.document;
+            const style = iframeDoc.createElement('style');
+            style.textContent = `
+                /* Force background color and text color */
+                .cusdis-comment, .cusdis-header {
+                    background-color: var(--card-background) !important;
+                    color: var(--text-color) !important;
+                }
+                /* Apply custom border-radius and shadow */
+                .cusdis-comment, .cusdis-header {
+                    border-radius: var(--card-border-radius) !important;
+                    box-shadow: var(--shadow-l1) !important;
+                }
+                .cusdis-comment iframe {
+                    background-color: var(--card-background) !important;
+                }
+            `;
+            iframeDoc.head.appendChild(style);
         }
     }
 
     window.addEventListener('onColorSchemeChange', (e) => {
-        setCusdisTheme(e.detail)
-    })
+        setCusdisTheme(e.detail);
+    });
 
     // Function to adjust the iframe height based on content
     function adjustCusdisIframeHeight() {
@@ -63,27 +83,4 @@
 
     // Call the adjust function once the page is loaded
     window.addEventListener('load', adjustCusdisIframeHeight);
-
-    // Function to apply custom styles to the Cusdis iframe (for custom background color in dark mode)
-    function applyCustomCusdisStyles() {
-        const iframe = document.querySelector('#cusdis_thread iframe');
-        if (iframe) {
-            const iframeDoc = iframe.contentWindow.document;
-            const style = document.createElement('style');
-            style.textContent = `
-                .cusdis-comment { 
-                    background-color: #333; 
-                    color: #fff; 
-                }
-                .cusdis-header { 
-                    background-color: #444; 
-                }
-                /* Add more custom styles here */
-            `;
-            iframeDoc.head.appendChild(style);
-        }
-    }
-
-    // Call the custom style function once the iframe is loaded
-    window.addEventListener('load', applyCustomCusdisStyles);
 </script>
