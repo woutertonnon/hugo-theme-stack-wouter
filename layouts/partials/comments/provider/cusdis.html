@@ -2,10 +2,20 @@
 
 <head>
     <style>
-      /* Inline custom CSS */
-      #cusdis_thread iframe {
-          width: 100% !important;
-      }
+        /* Inline custom CSS to match the site's design */
+        #cusdis_thread {
+            background-color: var(--card-background);  /* Match background color */
+            border-radius: var(--card-border-radius);  /* Match border radius */
+            box-shadow: var(--shadow-l1);  /* Match shadow */
+            padding: var(--card-padding);  /* Match padding */
+            width: 100%;
+        }
+
+        #cusdis_thread iframe {
+            width: 100% !important;
+            border-radius: var(--card-border-radius);  /* Match iframe border radius */
+            background-color: var(--card-background);  /* Match iframe background */
+        }
     </style>
 </head>
 
