@@ -11,10 +11,20 @@
             width: 100%;
         }
 
+        /* Targeting the iframe and adjusting styles */
         #cusdis_thread iframe {
             width: 100% !important;
             border-radius: var(--card-border-radius);  /* Match iframe border radius */
             background-color: var(--card-background);  /* Match iframe background */
+            border: none;  /* Remove border */
+        }
+
+        /* Dark Mode Styles */
+        :root[data-scheme="dark"] {
+            --card-background: #2f3947;  /* Dark background */
+            --card-border-radius: 6px;  /* Example border radius */
+            --shadow-l1: rgba(0, 0, 0, 0.1) 0px 4px 12px;  /* Example shadow */
+            --card-padding: 20px;  /* Example padding */
         }
     </style>
 </head>
@@ -33,13 +43,9 @@
     function setCusdisTheme(theme) {
         let cusdis = document.querySelector('#cusdis_thread iframe');
         if (cusdis) {
-            window.CUSDIS.setTheme(theme)
+            window.CUSDIS.setTheme(theme);
         }
     }
-
-    window.addEventListener('onColorSchemeChange', (e) => {
-        setCusdisTheme(e.detail)
-    })
 
     // Function to adjust the iframe height based on content
     function adjustCusdisIframeHeight() {
@@ -63,4 +69,16 @@
 
     // Call the adjust function once the page is loaded
     window.addEventListener('load', adjustCusdisIframeHeight);
+
+    // Listen for color scheme changes and apply dark/light mode
+    window.addEventListener('onColorSchemeChange', (e) => {
+        let theme = e.detail;  // 'dark' or 'light'
+        setCusdisTheme(theme); // Apply to the Cusdis iframe
+    });
+
+    // Check the initial theme and apply it
+    (function() {
+        let currentTheme = document.documentElement.getAttribute('data-scheme');
+        setCusdisTheme(currentTheme);  // Apply the theme on page load
+    })();
 </script>
