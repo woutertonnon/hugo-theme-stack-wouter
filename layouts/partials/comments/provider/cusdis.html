@@ -4,7 +4,7 @@
     <style>
         /* Inline custom CSS to match the site's design */
         #cusdis_thread {
-            background-color: #f0f0f0;/*var(--card-background);*/  /* Match background color */
+            background-color: var(--card-background);  /* Match background color */
             border-radius: var(--card-border-radius);  /* Match border radius */
             box-shadow: var(--shadow-l1);  /* Match shadow */
             padding: var(--card-padding);  /* Match padding */
@@ -12,7 +12,6 @@
         }
 
         #cusdis_thread iframe {
-            background-color: #f0f0f0;
             width: 100% !important;
             border-radius: var(--card-border-radius);  /* Match iframe border radius */
             background-color: var(--card-background);  /* Match iframe background */
@@ -64,4 +63,27 @@
 
     // Call the adjust function once the page is loaded
     window.addEventListener('load', adjustCusdisIframeHeight);
+
+    // Function to apply custom styles to the Cusdis iframe (for custom background color in dark mode)
+    function applyCustomCusdisStyles() {
+        const iframe = document.querySelector('#cusdis_thread iframe');
+        if (iframe) {
+            const iframeDoc = iframe.contentWindow.document;
+            const style = document.createElement('style');
+            style.textContent = `
+                .cusdis-comment { 
+                    background-color: #333; 
+                    color: #fff; 
+                }
+                .cusdis-header { 
+                    background-color: #444; 
+                }
+                /* Add more custom styles here */
+            `;
+            iframeDoc.head.appendChild(style);
+        }
+    }
+
+    // Call the custom style function once the iframe is loaded
+    window.addEventListener('load', applyCustomCusdisStyles);
 </script>
