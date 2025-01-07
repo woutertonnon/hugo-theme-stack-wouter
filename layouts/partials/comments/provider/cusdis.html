@@ -4,11 +4,10 @@
     <style>
       /* Inline custom CSS */
       #cusdis_thread iframe {
-          height: 1500px;
           width: 100% !important;
       }
     </style>
- </head>
+</head>
 
 <div id="cusdis_thread"
     data-host="{{ $host }}"
@@ -16,10 +15,11 @@
     data-page-id="{{ .File.UniqueID }}"
     data-page-url="{{ .Permalink }}"
     data-page-title="{{ .Title }}"></div>
+
 <script async defer src="{{ $host }}/js/cusdis.es.js"></script>
 
-
 <script>
+    // Function to set the theme for Cusdis comments
     function setCusdisTheme(theme) {
         let cusdis = document.querySelector('#cusdis_thread iframe');
         if (cusdis) {
@@ -30,4 +30,27 @@
     window.addEventListener('onColorSchemeChange', (e) => {
         setCusdisTheme(e.detail)
     })
+
+    // Function to adjust the iframe height based on content
+    function adjustCusdisIframeHeight() {
+        let iframe = document.querySelector('#cusdis_thread iframe');
+        if (iframe) {
+            // Set initial height or an initial estimate
+            iframe.style.height = '1500px';
+
+            // Dynamically adjust height based on content
+            setInterval(function() {
+                if (iframe && iframe.contentWindow) {
+                    let iframeDoc = iframe.contentWindow.document;
+                    if (iframeDoc) {
+                        let newHeight = iframeDoc.body.scrollHeight;
+                        iframe.style.height = newHeight + 'px';  // Auto-resize height
+                    }
+                }
+            }, 1000);  // Adjust every 1 second
+        }
+    }
+
+    // Call the adjust function once the page is loaded
+    window.addEventListener('load', adjustCusdisIframeHeight);
 </script>
