@@ -29,31 +29,40 @@
 <script async defer src="{{ $host }}/js/cusdis.es.js"></script>
 
 <script>
+    // Function to dynamically apply styles to the iframe content
+    function applyCustomStylesToIframe() {
+        const iframe = document.querySelector('#cusdis_thread iframe');
+        if (iframe && iframe.contentWindow) {
+            const iframeDoc = iframe.contentWindow.document;
+
+            if (iframeDoc && iframeDoc.body) {
+                iframeDoc.body.style.backgroundColor = "var(--card-background)"; // Apply the background color
+                iframeDoc.body.style.color = "var(--text-color)"; // Apply the text color
+                
+                // Optionally add a style tag for advanced customizations
+                const style = iframeDoc.createElement('style');
+                style.textContent = `
+                    /* Additional custom styles */
+                    .cusdis-comment, .cusdis-header {
+                        background-color: var(--card-background) !important;
+                        color: var(--text-color) !important;
+                        border-radius: var(--card-border-radius);
+                        box-shadow: var(--shadow-l1);
+                    }
+                `;
+                iframeDoc.head.appendChild(style);
+            }
+        }
+    }
+
     // Function to set the theme for Cusdis comments
     function setCusdisTheme(theme) {
         let cusdis = document.querySelector('#cusdis_thread iframe');
         if (cusdis) {
             window.CUSDIS.setTheme(theme);
 
-            // Force custom styles based on the theme
-            const iframeDoc = cusdis.contentWindow.document;
-            const style = iframeDoc.createElement('style');
-            style.textContent = `
-                /* Force background color and text color */
-                .cusdis-comment, .cusdis-header {
-                    background-color: var(--card-background) !important;
-                    color: var(--text-color) !important;
-                }
-                /* Apply custom border-radius and shadow */
-                .cusdis-comment, .cusdis-header {
-                    border-radius: var(--card-border-radius) !important;
-                    box-shadow: var(--shadow-l1) !important;
-                }
-                .cusdis-comment iframe {
-                    background-color: var(--card-background) !important;
-                }
-            `;
-            iframeDoc.head.appendChild(style);
+            // Apply custom styles after setting the theme
+            setTimeout(applyCustomStylesToIframe, 500); // Allow time for iframe content to load
         }
     }
 
@@ -81,6 +90,9 @@
         }
     }
 
-    // Call the adjust function once the page is loaded
-    window.addEventListener('load', adjustCusdisIframeHeight);
+    // Call functions once the page is fully loaded
+    window.addEventListener('load', () => {
+        adjustCusdisIframeHeight();
+        setTimeout(applyCustomStylesToIframe, 1000); // Ensure the styles are applied after iframe loads
+    });
 </script>
